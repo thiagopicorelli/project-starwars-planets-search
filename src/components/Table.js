@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PlanetContext, { ContextHeader, ContextProperty } from '../context/PlanetContext';
 
 function Table() {
-  const { planets } = useContext(PlanetContext);
+  const { planets, filtered } = useContext(PlanetContext);
 
   return (
     <div>
@@ -18,13 +18,13 @@ function Table() {
         </thead>
         <tbody>
           {
-            planets.map((planet, key) => (
+            filtered.map((pos, key) => (
               <tr key={ key }>
                 {
                   ContextProperty.map((prop, keyc) => (
                     <td key={ keyc }>
                       {
-                        planet[prop]
+                        planets[pos][prop]
                       }
                     </td>
                   ))
