@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 const PlanetContext = createContext();
+
 export const ContextHeader = [
   'Name',
   'Rotation Period',
