@@ -6,6 +6,23 @@ function useFilter() {
     text: '',
   });
 
+  function setComparator(newFiltered, opt) {
+    if (opt.comparator === 'maior que') {
+      newFiltered = newFiltered.filter(
+        (planet) => +(planet[opt.column]) > +(opt.value),
+      );
+    } else if (opt.comparator === 'menor que') {
+      newFiltered = newFiltered.filter(
+        (planet) => +(planet[opt.column]) < +(opt.value),
+      );
+    } else {
+      newFiltered = newFiltered.filter(
+        (planet) => +(planet[opt.column]) === +(opt.value),
+      );
+    }
+    return newFiltered;
+  }
+
   function setFilter(planets, att, val) {
     if (att === undefined) {
       setFiltered(planets);
@@ -13,7 +30,14 @@ function useFilter() {
     }
 
     const newFilter = { ...filter };
-    newFilter[att] = val;
+    if (att === 'text') {
+      newFilter[att] = val;
+    } else {
+      if (newFilter[att] === undefined) {
+        newFilter[att] = [];
+      }
+      newFilter[att].push(val);
+    }
     setFilterObj(newFilter);
 
     let newFiltered = [...planets];
@@ -26,19 +50,9 @@ function useFilter() {
         );
         break;
       case 'comp':
-        if (value.comparator === 'maior que') {
-          newFiltered = newFiltered.filter(
-            (planet) => +(planet[value.column]) > +(value.value),
-          );
-        } else if (value.comparator === 'menor que') {
-          newFiltered = newFiltered.filter(
-            (planet) => +(planet[value.column]) < +(value.value),
-          );
-        } else {
-          newFiltered = newFiltered.filter(
-            (planet) => +(planet[value.column]) === +(value.value),
-          );
-        }
+        value.forEach((opt) => {
+          newFiltered = setComparator(newFiltered, opt);
+        });
         break;
       default:
       }
