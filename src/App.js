@@ -7,7 +7,7 @@ import Index from './pages/Index';
 
 function App() {
   const [planets, setPlanets] = useState([]);
-  const { filtered, setFilter } = useFilter();
+  const { filtered, filter, setFilter } = useFilter();
   const [page] = useState(1);
 
   useEffect(() => {
@@ -18,12 +18,14 @@ function App() {
     if (planets.length === 0) {
       setFetchPlanets();
     } else {
-      setFilter(planets);
+      setFilter(planets, undefined);
     }
   }, [planets, page]);
 
   return (
-    <PlanetContext.Provider value={ { planets, filtered, setFilter } }>
+    <PlanetContext.Provider
+      value={ { planets, filtered, filter, setFilter } }
+    >
       <Index />
     </PlanetContext.Provider>
   );
