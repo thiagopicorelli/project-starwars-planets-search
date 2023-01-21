@@ -8,19 +8,37 @@ function Index() {
   const [comparator, setComparator] = useState('maior que');
   const [valueCompare, setValueCompare] = useState(0);
 
-  const columnSelect = (testid, columnValue, setColumn) => (
+  const columnListInit = [
+    'population', 'orbital_period', 'diameter',
+    'rotation_period', 'surface_water',
+  ];
+
+  const [columnListComp, setColumnListComp] = useState(columnListInit);
+
+  const columnSelect = (testid, columnList, columnValue, setColumn) => (
     <select
       data-testid={ testid }
       value={ columnValue }
       onChange={ (e) => setColumn(e.target.value) }
     >
-      <option value="population">population</option>
-      <option value="orbital_period">orbital_period</option>
-      <option value="diameter">diameter</option>
-      <option value="rotation_period">rotation_period</option>
-      <option value="surface_water">surface_water</option>
+      {
+        columnList.map((column, key) => (
+          <option key={ key } value={ column }>{ column }</option>
+        ))
+      }
     </select>
   );
+
+  const buttonFilter = () => {
+    setFilter(planets, 'comp', {
+      column: columnCompare,
+      comparator,
+      value: valueCompare,
+    });
+    const newColumnListComp = columnListComp.filter((col) => col !== columnCompare);
+    setColumnListComp(newColumnListComp);
+    setColumnCompare(newColumnListComp[0]);
+  };
 
   return (
     <div>
@@ -30,7 +48,7 @@ function Index() {
         onChange={ (e) => setFilter(planets, 'text', e.target.value) }
       />
       <div>
-        { columnSelect('column-filter', columnCompare, setColumnCompare) }
+        { columnSelect('column-filter', columnListComp, columnCompare, setColumnCompare) }
         <select
           data-testid="comparison-filter"
           value={ comparator }
@@ -49,11 +67,7 @@ function Index() {
         <button
           data-testid="button-filter"
           type="button"
-          onClick={ () => setFilter(planets, 'comp', {
-            column: columnCompare,
-            comparator,
-            value: valueCompare,
-          }) }
+          onClick={ buttonFilter }
         >
           Filtrar
         </button>
