@@ -11,19 +11,22 @@ function useFilter() {
       setFiltered(planets);
       return;
     }
-
     const newFilter = { ...filter };
     newFilter[att] = value;
     setFilterObj(newFilter);
 
-    let newFiltered;
-    switch (att) {
-    case 'text':
-      newFiltered = planets.filter(
-        (planet) => planet.name.toLowerCase().includes(value.toLowerCase().trim()),
-      );
-      setFiltered(newFiltered);
-    }
+    let newFiltered = [...planets];
+    Object.keys(newFilter).forEach((prop) => {
+      switch (prop) {
+      case 'text':
+        newFiltered = newFiltered.filter(
+          (planet) => planet.name.toLowerCase().includes(value.toLowerCase().trim()),
+        );
+        break;
+      default:
+      }
+    });
+    setFiltered(newFiltered);
   }
 
   return { filtered, filter, setFilter };
