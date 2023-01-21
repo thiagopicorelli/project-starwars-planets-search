@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import PlanetContext from './context/PlanetContext';
 import fetchPlanets from './fetch/fetchPlanets';
-import Table from './components/Table';
+import useFilter from './hooks/useFilter';
+import Index from './pages/Index';
 
 function App() {
   const [planets, setPlanets] = useState([]);
-  const [filtered, setFilter] = useState([]);
+  const { filtered, setFilter } = useFilter();
   const [page] = useState(1);
 
   useEffect(() => {
@@ -14,20 +15,16 @@ function App() {
       const data = await fetchPlanets(page);
       setPlanets(data);
     }
-
     if (planets.length === 0) {
       setFetchPlanets();
     } else {
-      setFilter(Array.from(planets.keys()));
+      setFilter(planets);
     }
   }, [planets, page]);
 
   return (
-    <PlanetContext.Provider value={ { planets, filtered } }>
-      <div>
-        <span>Hello, App!</span>
-        <Table />
-      </div>
+    <PlanetContext.Provider value={ { planets, filtered, setFilter } }>
+      <Index />
     </PlanetContext.Provider>
   );
 }
