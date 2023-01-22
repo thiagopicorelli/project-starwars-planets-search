@@ -22,7 +22,7 @@ function Table() {
               <tr key={ key }>
                 {
                   ContextProperty.map((prop, keyc) => (
-                    <td key={ keyc }>
+                    <td key={ keyc } data-testid={ `planet-${prop}` }>
                       {
                         planet[prop]
                       }

@@ -41,7 +41,30 @@ function useFilter() {
       default:
       }
     });
-    setFiltered(newFiltered);
+
+    return newFiltered;
+  }
+
+  function sortFunction(a, b, result) {
+    const inv = -1;
+    if (a === 'unknown') {
+      return result;
+    }
+    if (b === 'unknown') {
+      return inv * result;
+    }
+    return a - b;
+  }
+
+  function setSort(val) {
+    const inv = -1;
+    if (val.order === 'ASC') {
+      return filtered.sort((a, b) => sortFunction(a[val.col], b[val.col], 1));
+    }
+    if (val.order === 'DESC') {
+      return filtered.sort((a, b) => inv * sortFunction(a[val.col], b[val.col], inv));
+    }
+    return filtered;
   }
 
   function setFilter(planets, att, val) {
@@ -64,13 +87,21 @@ function useFilter() {
     case 'rem_comp':
       newFilter.comp.splice(val, 1);
       break;
+    case 'sort':
+      break;
     default:
       setFiltered(planets);
       return;
     }
 
-    setFilterObj(newFilter);
-    makeFilter(planets, newFilter);
+    let newFiltered = [];
+    if (att !== 'sort') {
+      setFilterObj(newFilter);
+      newFiltered = makeFilter(planets, newFilter);
+    } else {
+      newFiltered = setSort(val);
+    }
+    setFiltered(newFiltered);
   }
 
   return { filtered, filter, setFilter };

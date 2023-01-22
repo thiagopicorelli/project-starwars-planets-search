@@ -7,13 +7,14 @@ function Index() {
   const [columnCompare, setColumnCompare] = useState('population');
   const [comparator, setComparator] = useState('maior que');
   const [valueCompare, setValueCompare] = useState(0);
-
   const columnListInit = [
     'population', 'orbital_period', 'diameter',
     'rotation_period', 'surface_water',
   ];
-
   const [columnListComp, setColumnListComp] = useState(columnListInit);
+
+  const [columnSort, setColumnSort] = useState('population');
+  const [sort, setSort] = useState('');
 
   const columnSelect = (testid, columnList, columnValue, setColumn) => (
     <select
@@ -48,6 +49,14 @@ function Index() {
     setColumnListComp(unusedColumns);
   };
 
+  const setSortToTable = () => {
+    setFilter(planets, 'sort', {
+      order: sort,
+      col: columnSort,
+    });
+    setSort('');
+  };
+
   return (
     <div>
       <input
@@ -79,13 +88,39 @@ function Index() {
         >
           Filtrar
         </button>
-
         <button
           type="button"
           data-testid="button-remove-filters"
           onClick={ () => setFilter(planets) }
         >
           Remover Filtros
+        </button>
+      </div>
+      <div>
+        { columnSelect('column-sort', columnListInit, columnSort, setColumnSort) }
+        <span>Ascendente</span>
+        <input
+          data-testid="column-sort-input-asc"
+          type="radio"
+          name="sort"
+          value="ASC"
+          checked={ sort === 'ASC' }
+          onChange={ () => setSort('ASC') }
+        />
+        <span>Descendente</span>
+        <input
+          data-testid="column-sort-input-desc"
+          type="radio"
+          name="sort"
+          value="DESC"
+          checked={ sort === 'DESC' }
+          onChange={ () => setSort('DESC') }
+        />
+        <button
+          data-testid="column-sort-button"
+          onClick={ () => setSortToTable() }
+        >
+          Ordenar
         </button>
       </div>
       <div>
