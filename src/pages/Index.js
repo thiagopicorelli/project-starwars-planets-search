@@ -45,7 +45,6 @@ function Index() {
     setFilter(planets, 'rem_comp', index);
     const usedColumns = filter.comp.map((opt) => opt.column);
     const unusedColumns = columnListInit.filter((col) => !usedColumns.includes(col));
-    console.log(index);
     setColumnListComp(unusedColumns);
   };
 
@@ -133,6 +132,7 @@ function Index() {
               >
                 { `${opt.column} ${opt.comparator} ${opt.value} ` }
                 <button
+                  data-testid="remove-filter"
                   onClick={ () => removeCompare(key) }
                 >
                   X

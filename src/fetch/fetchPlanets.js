@@ -1,7 +1,7 @@
 async function fetchPlanets(page) {
-  const data = await fetch(`https://swapi.dev/api/planets/?page=${page}`)
-    .then((response) => response.json());
-  return data.results;
+  const data = await fetch(`https://swapi.dev/api/planets/?page=${page}`);
+  const response = await data.json();
+  return response.results;
 }
 
 export default fetchPlanets;
