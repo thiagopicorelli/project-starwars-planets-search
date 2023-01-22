@@ -40,6 +40,14 @@ function Index() {
     setColumnCompare(newColumnListComp[0]);
   };
 
+  const removeCompare = (index) => {
+    setFilter(planets, 'rem_comp', index);
+    const usedColumns = filter.comp.map((opt) => opt.column);
+    const unusedColumns = columnListInit.filter((col) => !usedColumns.includes(col));
+    console.log(index);
+    setColumnListComp(unusedColumns);
+  };
+
   return (
     <div>
       <input
@@ -71,6 +79,33 @@ function Index() {
         >
           Filtrar
         </button>
+
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          onClick={ () => setFilter(planets) }
+        >
+          Remover Filtros
+        </button>
+      </div>
+      <div>
+        {
+          filter.comp !== undefined
+            ? filter.comp.map((opt, key) => (
+              <div
+                key={ key }
+                data-testid="filter"
+              >
+                { `${opt.column} ${opt.comparator} ${opt.value} ` }
+                <button
+                  onClick={ () => removeCompare(key) }
+                >
+                  X
+                </button>
+              </div>
+            ))
+            : (<div />)
+        }
       </div>
       <Table />
     </div>

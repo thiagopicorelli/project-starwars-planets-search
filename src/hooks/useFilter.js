@@ -23,23 +23,7 @@ function useFilter() {
     return newFiltered;
   }
 
-  function setFilter(planets, att, val) {
-    if (att === undefined) {
-      setFiltered(planets);
-      return;
-    }
-
-    const newFilter = { ...filter };
-    if (att === 'text') {
-      newFilter[att] = val;
-    } else {
-      if (newFilter[att] === undefined) {
-        newFilter[att] = [];
-      }
-      newFilter[att].push(val);
-    }
-    setFilterObj(newFilter);
-
+  function makeFilter(planets, newFilter) {
     let newFiltered = [...planets];
     Object.keys(newFilter).forEach((prop) => {
       const value = newFilter[prop];
@@ -58,6 +42,35 @@ function useFilter() {
       }
     });
     setFiltered(newFiltered);
+  }
+
+  function setFilter(planets, att, val) {
+    if (att === undefined) {
+      setFiltered(planets);
+      return;
+    }
+
+    const newFilter = { ...filter };
+    switch (att) {
+    case 'text':
+      newFilter[att] = val;
+      break;
+    case 'comp':
+      if (newFilter[att] === undefined) {
+        newFilter[att] = [];
+      }
+      newFilter[att].push(val);
+      break;
+    case 'rem_comp':
+      newFilter.comp.splice(val, 1);
+      break;
+    default:
+      setFiltered(planets);
+      return;
+    }
+
+    setFilterObj(newFilter);
+    makeFilter(planets, newFilter);
   }
 
   return { filtered, filter, setFilter };
